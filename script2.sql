@@ -34,13 +34,17 @@ CREATE TABLE liquor_locations (
 	license_type text,
 	issue_date timestamp with time zone,
 	end_date timestamp with time zone,
+	council_dist integer,
+	police_dist integer,
 	census_tract integer, 
 	x_coord double precision,
 	y_coord double precision
 );
 
 INSERT INTO liquor_locations (bfn, store_name, address, license_type,
-		issue_date, end_date, census_tract, x_coord, y_coord)
+		issue_date, end_date, council_dist, police_dist, census_tract, x_coord, y_coord)
 	SELECT DISTINCT bfn, store_name, address, license_type,
-		issue_date, end_date, census_tract, x_coord, y_coord
+		issue_date, end_date, council_dist, police_dist, census_tract, x_coord, y_coord
 	FROM liquor_locations_complete;
+
+
