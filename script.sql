@@ -49,8 +49,8 @@ CREATE TABLE crime (
 	first_occ_date timestamp,
 	last_occ_date timestamp,
 	reported_date timestamp,
-	lon float,
-	lat float,
+	geo_x float,
+	geo_y float,
 	dist_id integer,
 	prec_id integer,
 	nbhd_id text,
@@ -58,8 +58,8 @@ CREATE TABLE crime (
 	PRIMARY KEY (inc_id, off_id, off_code, off_code_ext)
 );
 
-INSERT INTO crime (inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, lon, lat, dist_id, prec_id, nbhd_id)
-	SELECT DISTINCT inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, lon, lat, dist_id, prec_id, nbhd_id
+INSERT INTO crime (inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id)
+	SELECT DISTINCT inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id
 	FROM crime_init;
 
 DROP TABLE IF EXISTS crime_init;
