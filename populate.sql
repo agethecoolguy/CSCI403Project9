@@ -52,7 +52,7 @@ CREATE TABLE crime (
 	prec_id integer,
 	nbhd_id text,
 	is_crime boolean,
-	is_traffic boolean
+	is_traffic boolean,
 	FOREIGN KEY (off_code, off_code_ext) REFERENCES codes (off_code, off_code_ext),
 	PRIMARY KEY (inc_id, off_id, off_code, off_code_ext)
 );
