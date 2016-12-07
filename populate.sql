@@ -51,14 +51,12 @@ CREATE TABLE crime (
 	dist_id integer,
 	prec_id integer,
 	nbhd_id text,
-	is_crime boolean,
-	is_traffic boolean,
 	FOREIGN KEY (off_code, off_code_ext) REFERENCES codes (off_code, off_code_ext),
 	PRIMARY KEY (inc_id, off_id, off_code, off_code_ext)
 );
 
-INSERT INTO crime (inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id, is_crime, is_traffic)
-	SELECT DISTINCT inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id, is_crime, is_traffic
+INSERT INTO crime (inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id)
+	SELECT DISTINCT inc_id, off_id, off_code, off_code_ext, first_occ_date, last_occ_date, reported_date, geo_x, geo_y, dist_id, prec_id, nbhd_id
 	FROM crime_init
 	WHERE dist_id IS NOT NULL;
 DROP TABLE IF EXISTS crime_init;

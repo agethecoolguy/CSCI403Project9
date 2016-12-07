@@ -9,6 +9,8 @@ CREATE TABLE day_night_incident_comparison(
 	PRIMARY KEY(time_of_day, violation_type)
 );
 
+/* this section will have to be modified to reflect the normalized tables */
+
 INSERT INTO day_night_incident_comparison(time_of_day, violation_type, num_incidents)
 	SELECT 'Day', 'Traffic', COUNT(*) FROM crime
 	WHERE is_traffic IS TRUE AND extract(hour from first_occ_date) >= 7 AND extract(hour from first_occ_date) <= 19;
