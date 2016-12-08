@@ -1,30 +1,47 @@
 /* This query creates a table comparing the number of crime vs traffic related incidents at night vs during the day. */
 
-DROP TABLE IF EXISTS day_night_incident_comparison;
+DROP TABLE IF EXISTS incident_comparison;
 
-CREATE TABLE day_night_incident_comparison(
+CREATE TABLE incident_comparison(
 	time_of_day text,
 	violation_type text,
-	num_incidents integer,
+	incidents_per_hour integer,
 	PRIMARY KEY(time_of_day, violation_type)
 );
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'ALL', 'ALL', COUNT(*)/24 FROM crime;
 
-INSERT INTO day_night_incident_comparison(time_of_day, violation_type, num_incidents)
-	SELECT 'Day', 'Traffic', COUNT(*) FROM crime 
-	WHERE off_code IN (SELECT off_code FROM codes WHERE is_traffic IS TRUE) 
-		AND extract(hour from first_occ_date) >= 7 AND extract(hour from first_occ_date) <= 19;
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Day', 'ALL', COUNT(*)/10 FROM crime 
+	WHERE extract(hour from first_occ_date) >= 10 AND extract(hour from first_occ_date) <= 20;
 
-INSERT INTO day_night_incident_comparison(time_of_day, violation_type, num_incidents)
-	SELECT 'Day','Crime', COUNT(*) FROM crime 
-	WHERE off_code IN (SELECT off_code FROM codes WHERE is_crime IS TRUE) 
-		AND extract(hour from first_occ_date) >= 7 AND extract(hour from first_occ_date) <= 19;
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Night', 'ALL', COUNT(*)/8 FROM crime 
+	WHERE extract(hour from first_occ_date) <= 4 OR extract(hour from first_occ_date) >= 20;
 
-INSERT INTO day_night_incident_comparison(time_of_day, violation_type, num_incidents)
-	SELECT 'Night', 'Traffic', COUNT(*) FROM crime 
-	WHERE off_code IN (SELECT off_code FROM codes WHERE is_traffic IS TRUE) 
-		AND extract(hour from first_occ_date) <= 7 OR extract(hour from first_occ_date) >= 19;
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Morning', 'ALL', COUNT(*)/6 FROM crime 
+	WHERE extract(hour from first_occ_date) >= 4 AND extract(hour from first_occ_date) <= 10;
 
-INSERT INTO day_night_incident_comparison(time_of_day, violation_type, num_incidents)
-	SELECT 'Night', 'Crime', COUNT(*) FROM crime 
-	WHERE off_code IN (SELECT off_code FROM codes WHERE is_crime IS TRUE) 
-		AND extract(hour from first_occ_date) <= 7 OR extract(hour from first_occ_date) >= 19;
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Drinking', 'ALL', COUNT(*)/9 FROM crime 
+	WHERE extract(hour from first_occ_date) >= 15;
+
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Non-Drinking', 'ALL', COUNT(*)/4 FROM crime 
+	WHERE extract(hour from first_occ_date) >= 11 AND extract(hour from first_occ_date) <= 15;
+
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Drinking', 'Alcohol-Related', COUNT(*)/9 FROM crime 
+	WHERE off_code IN (SELECT off_code FROM codes WHERE off_type_name = 'Manufacture of liquor' OR off_type_name = 'Illegal sale of liquor' OR 
+		off_type_name = 'Illegal possession of liquor' OR off_type_name = 'Liquor law violation' OR off_type_name = 'Liquor law violation - other' 
+		OR off_type_name = 'Public intoxication') 
+		AND extract(hour from first_occ_date) >= 15;
+
+INSERT INTO incident_comparison(time_of_day, violation_type, incidents_per_hour)
+	SELECT 'Non-Drinking', 'Alcohol-Related', COUNT(*)/4 FROM crime 
+	WHERE off_code IN (SELECT off_code FROM codes WHERE off_type_name = 'Manufacture of liquor' OR off_type_name = 'Illegal sale of liquor' OR 
+		off_type_name = 'Illegal possession of liquor' OR off_type_name = 'Liquor law violation' OR off_type_name = 'Liquor law violation - other' 
+		OR off_type_name = 'Public intoxication') 
+		AND extract(hour from first_occ_date) >= 11 AND extract(hour from first_occ_date) <= 15;
+
