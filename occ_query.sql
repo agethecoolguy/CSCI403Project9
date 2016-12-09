@@ -33,10 +33,29 @@ WHERE occ_hour > 4 AND occ_hour < 20;
 SELECT 'n count: ' || count(*) FROM corrtable
 WHERE occ_hour <= 4 OR occ_hour >= 20;
 
-/*
-SELECT c.off_type_name, cr.off_code, cr.off_code_ext, count(*)
-FROM codes AS c, crime as cr
-WHERE 'Theft of fuel by driving off without paying' = c.off_type_name AND cr.off_code = c.off_code AND cr.off_code_ext = c.off_code_ext
-GROUP BY c.off_type_name, cr.off_code_ext, cr.off_code
+
+
+/*Quick comparison of equal hour lengths*/
+SELECT 'Early Morning(12-8am): ' || count(*) FROM corrtable
+WHERE occ_hour < 8 AND occ_hour >= 0;
+
+SELECT 'Mid-day(8am-4pm) count: ' || count(*) FROM corrtable
+WHERE occ_hour >= 8 AND occ_hour < 16;
+
+SELECT 'Night(4pm-12am): ' || count(*) FROM corrtable
+WHERE occ_hour > 16 AND occ_hour < 24;
+
+
+/*Which hour of the day has the most crimes*/
+SELECT c.occ_hour, count(*)
+FROM corrtable AS c
+GROUP BY c.occ_hour
+ORDER BY count(*) DESC;
+
+/*Which hour has the most 'Window Peeping' tickets*/
+SELECT c.off_type_name, ct.occ_hour, count(*)
+FROM codes AS c, corrtable AS ct
+WHERE 'Window Peeping' = c.off_type_name AND ct.off_code = c.off_code AND ct.off_code_ext = c.off_code_ext
+GROUP BY c.off_type_name, ct.occ_hour
+ORDER BY count(*) DESC
 LIMIT 20;
-*/
