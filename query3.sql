@@ -1,0 +1,4 @@
+select count(*), codes.off_type_name from crime inner join codes on codes.off_code = crime.off_code group by codes.off_type_name order by count;
+select count(*), codes.off_type_name from crime inner join codes on codes.off_code = crime.off_code group by codes.off_type_name order by count desc;
+select count(*), codes.off_type_name from crime inner join codes on codes.off_code = crime.off_code where codes.is_traffic = false group by codes.off_type_name order by count desc;
+select count(*), codes.off_type_name from crime inner join codes on codes.off_code = crime.off_code where codes.is_traffic = true group by codes.off_type_name order by count;
