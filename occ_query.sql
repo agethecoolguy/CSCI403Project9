@@ -50,7 +50,8 @@ WHERE occ_hour > 16 AND occ_hour < 24;
 SELECT c.occ_hour, count(*)
 FROM corrtable AS c
 GROUP BY c.occ_hour
-ORDER BY count(*) DESC;
+ORDER BY count(*) DESC
+LIMIT 5;
 
 /*Which hour has the most 'Window Peeping' tickets*/
 SELECT c.off_type_name, ct.occ_hour, count(*)
@@ -58,4 +59,4 @@ FROM codes AS c, corrtable AS ct
 WHERE 'Window Peeping' = c.off_type_name AND ct.off_code = c.off_code AND ct.off_code_ext = c.off_code_ext
 GROUP BY c.off_type_name, ct.occ_hour
 ORDER BY count(*) DESC
-LIMIT 20;
+LIMIT 5;
